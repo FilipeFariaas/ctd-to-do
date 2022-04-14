@@ -1,0 +1,74 @@
+.avatars-wrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 5;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 100vw;
+	height: 100vh;
+
+	background-color: rgba(0, 0, 0, .7);
+}
+
+.close-modal {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+
+	width: 25px;
+	aspect-ratio:  1;
+
+	padding: .5rem;
+
+	font-weight: bold;
+	color: red;
+}
+
+.avatars {
+	position: relative;
+	z-index: 10;
+
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+	place-items: center;
+	gap: 1rem;
+
+	width: 80%;
+	min-width: 300px;
+	height: fit-content;
+
+	border-radius: 25px;
+
+	background-color: white;
+
+	box-shadow: 2px 2px 5px lightgrey;
+
+/*	width: 100%;
+	height: fit-content;*/
+
+	padding: 2.5rem;
+
+	list-style: none;
+}
+
+.avatar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	transition: all .5s ease-in-out;
+}
+
+.avatar img {
+	width: 100%;
+}
+
+.avatar:hover {
+	cursor: pointer;
+
+	transform: scale(1.2);
+}
