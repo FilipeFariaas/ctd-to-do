@@ -32,7 +32,9 @@ function avatarsModal() {
   avatarsModal.classList.add(`avatars-wrapper`);
   avatarsModal.innerHTML += `
     <ul class="avatars">
-      <button class="close-modal">X</button>
+      <button class="close-modal btn-close">
+        <span class="lnr lnr-cross"></span>
+      </button>
       <li class="avatar">
         <img src="../assets/avatars/man-1.png" />
       </li>

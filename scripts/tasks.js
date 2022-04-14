@@ -79,7 +79,9 @@ const editTask = (id, taskTitle) => {
   editTaskModal.classList.add(`edit-task-modal`);
   editTaskModal.innerHTML += `
     <form class="edit-task">
-      <button id="close-edit-modal">X</button>
+      <button id="close-edit-modal" class="btn-close">
+        <span class="lnr lnr-cross"></span>
+      </button>
       <div class="edit-task--input-wrapper">
         <label>Título</label>
         <input id="edit-task-input" type="text" value="${taskTitle}" />
@@ -105,6 +107,16 @@ const editTask = (id, taskTitle) => {
   const inputEditTask = document.querySelector(`#edit-task-input`);
   const btnSaveEdit = document.querySelector(`#save-change`);
   const btnCancelEdit = document.querySelector(`#cancel-change`);
+
+  inputEditTask.addEventListener(`keypress`, (key) => {
+    if (key.key === `Enter`) {
+      const newTitle = inputEditTask.value;
+      currentTaskTitle.innerText = newTitle;
+
+      saveChanges(id, newTitle);
+      // closeEditModal(container, editTaskModal);
+    }
+  });
 
   btnSaveEdit.addEventListener(`click`, (e) => {
     e.preventDefault();
@@ -185,9 +197,11 @@ const createTaskTemplate = (id, title, creation, completed) => {
     completed ? "concluida" : "pendente"
   }">
       <button id="edit-task">
-        <img src="../assets/pencil.png" />
+        <span class="lnr lnr-pencil"></span>
       </button>
-      <button id="deleteTask">X</button>
+      <button id="deleteTask">
+        <span class="lnr lnr-cross"></span>
+      </button>
       <div class="not-done"></div>
       <div class="descricao">
         <p class="nome">${title}</p>
