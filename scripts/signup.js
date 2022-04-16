@@ -149,7 +149,7 @@ function registerSuccessful(name, lastname, email, jsonReceived) {
     JSON.stringify(storedRegisteredUsers)
   );
 
-  window.location.href = "../pages/tasks.html";
+  //window.location.href = "../pages/tasks.html";
 }
 
 btnConfirm.addEventListener(`click`, (e) => {
@@ -180,14 +180,27 @@ btnConfirm.addEventListener(`click`, (e) => {
         return response.json();
       })
       .then((response) => {
-        registerSuccessful(
-          inputName.value,
-          inputLastname.value,
-          inputEmail.value,
-          response.jwt
-        );
-        saveJwt(response.jwt);
-        window.location.href = "../pages/tasks.html";
+        try{
+          if(response.jwt!=""){
+            registerSuccessful(
+            inputName.value,
+            inputLastname.value,
+            inputEmail.value,
+            response.jwt
+            );
+            saveJwt(response.jwt);
+            //window.location.href = "../pages/tasks.html";
+          }
+          else{
+            alert("Falha no registro, por favor tente novamente.")
+            console.log(response)
+          }
+        }
+        catch{
+            alert("Falha no registro, por favor tente novamente.")
+            console.log(response)
+        }
+        
       })
       .catch((error) => console.log(error));
   }

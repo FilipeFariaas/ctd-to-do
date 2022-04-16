@@ -1,4 +1,7 @@
 "use-strict";
+const saveJwt = (jwt) => {
+  return localStorage.setItem("jwt", jwt);
+};
 
 const form = document.querySelector(`form`);
 const inputEmail = document.querySelector(`#inputEmail`);
@@ -22,10 +25,6 @@ if (!localStorage.getItem(`registeredUsers`)) {
 const storedRegisteredUsers = JSON.parse(
   localStorage.getItem(`registeredUsers`)
 );
-
-const saveJwt = (jwt) => {
-  return localStorage.setItem("jwt", jwt);
-};
 
 form.addEventListener(`submit`, (e) => {
   e.preventDefault();
@@ -58,8 +57,25 @@ btnSubmit.addEventListener(`click`, (e) => {
         return response.json();
       })
       .then((response) => {
-        saveJwt(response.jwt);
-        window.location.href = "./pages/tasks.html";
+        try{
+          if(response.jwt){
+            saveJwt(response.jwt);
+            window.location.href = "./pages/tasks.html";
+          
+          }
+          else{
+            //alert("Falha na autenticacão, verifique usuário e senha.")
+            msgErr.innerText = "Falha na autenticacão, verifique usuário e senha."
+            inputPass.parentElement.appendChild(msgErr);
+          }
+
+        }
+        catch{
+            //alert("Falha na autenticacão, verifique usuário e senha.")
+            msgErr.innerText = "Falha na autenticacão, verifique usuário e senha."
+            inputPass.parentElement.appendChild(msgErr);
+        }
+        
       })
       .catch((error) => console.log(error));
   }
