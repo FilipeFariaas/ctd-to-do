@@ -66,6 +66,7 @@ const getTaskData = (id) => {
       return reponse.json();
     })
     .then((data) => {
+      console.log(data)
       const { id } = data;
       const { description } = data;
 
@@ -77,24 +78,25 @@ const getTaskData = (id) => {
 };
 
 const editTask = (id, taskTitle) => {
+  const currentTaskTitle = document.querySelector(`#_${id} .nome`)
   const container = document.querySelector(`.container`);
   const editTaskModal = document.createElement(`div`);
   editTaskModal.classList.add(`edit-task-modal`);
   editTaskModal.innerHTML += `
-<form class="edit-task">
-  <button id="close-edit-modal" class="btn-close">
-    <span class="lnr lnr-cross"></span>
-  </button>
-  <div class="edit-task--input-wrapper">
-    <label>Título</label>
-    <input id="edit-task-input" type="text" value="${taskTitle}" />
-  </div>
-  <div class="edit-task-buttons">
-    <button id="save-change">Save</button>
-    <button id="cancel-change">Cancel</button>
-  </div>
-</form>
-`;
+  <form class="edit-task">
+    <button id="close-edit-modal" class="btn-close">
+      <span class="lnr lnr-cross"></span>
+    </button>
+    <div class="edit-task--input-wrapper">
+      <label>Título</label>
+      <input id="edit-task-input" type="text" value="${taskTitle}" />
+    </div>
+    <div class="edit-task-buttons">
+      <button id="save-change">Save</button>
+      <button id="cancel-change">Cancel</button>
+    </div>
+  </form>
+  `;
 
   container.appendChild(editTaskModal);
 
@@ -105,7 +107,7 @@ const editTask = (id, taskTitle) => {
     container.removeChild(editTaskModal);
   });
 
-  const currentTaskTitle = document.querySelector(`#_${id} .nome`);
+  // const currentTaskTitle = document.querySelector(`#_${id} .nome`);
   const inputEditTask = document.querySelector(`#edit-task-input`);
   const btnSaveEdit = document.querySelector(`#save-change`);
   const btnCancelEdit = document.querySelector(`#cancel-change`);
@@ -153,7 +155,7 @@ const completeTask = (id) => {
     const taskObj = {
       id: taskId,
       description: taskTitle,
-      createdAt: taskCreation,
+      createdAt: new Date(),
       completed: taskIsComplete
     };
 
@@ -179,9 +181,9 @@ const completeTask = (id) => {
       .then((response) => {
         return response.json();
       })
-      .then((response) => {
-        console.log(response);
-      })
+      // .then((response) => {
+      //   console.log(response);
+      // })
       .catch((err) => console.log(err));
 }
 
@@ -241,26 +243,27 @@ const completeTask = (id) => {
 
 const createTaskTemplate = (id, title, creation, completed) => {
   const taskTemplate = `
-<li id=_${id} class="tarefa tarefa--${completed ? "concluida" : "pendente"
-    }">
-  <button id="edit-task" onclick="editTask(${id})">
-    <span class="lnr lnr-pencil"></span>
-  </button>
-  <button id="deleteTask" onclick="deleteTask(${id})">
-    <span class="lnr lnr-cross"></span>
-  </button>
-  <div class="not-done" onclick="completeTask(${id})"></div>
-  <div class="descricao">
-    <p class="nome">${title}</p>
-    <p class="timestamp">${new Date(creation).toLocaleString()}</p>
-  </div>
-</li>
-`;
+  <li id=_${id} class="tarefa tarefa--${completed ? "concluida" : "pendente"
+      }">
+    <button id="edit-task" onclick="getTaskData(${id})">
+      <span class="lnr lnr-pencil"></span>
+    </button>
+    <button id="deleteTask" onclick="deleteTask(${id})">
+      <span class="lnr lnr-cross"></span>
+    </button>
+    <div class="not-done" onclick="completeTask(${id})"></div>
+    <div class="descricao">
+      <p class="nome">${title}</p>
+      <p class="timestamp">${new Date(creation).toLocaleString()}</p>
+    </div>
+  </li>
+  `;
 
   return taskTemplate;
 };
 
 const renderTask = (task) => {
+  console.log(task)
   const { completed } = task;
 
   if (completed) {
@@ -344,7 +347,8 @@ const validateAccess = () => {
 btnEndSession.addEventListener(`click`, (e) => {
   e.preventDefault();
 
-  localStorage.removeItem(`jwt`);
+  // localStorage.removeItem(`jwt`);
+  localStorage.clear()
   window.location = "../index.html";
   console.log(`clicked`);
 });
