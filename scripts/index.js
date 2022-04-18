@@ -3,6 +3,10 @@ const saveJwt = (jwt) => {
   return localStorage.setItem("jwt", jwt);
 };
 
+if(localStorage.getItem("jwt")) {
+  window.location.href = "./pages/tasks.html";
+}
+
 const form = document.querySelector(`form`);
 const inputEmail = document.querySelector(`#inputEmail`);
 const inputPass = document.querySelector(`#inputPassword`);
