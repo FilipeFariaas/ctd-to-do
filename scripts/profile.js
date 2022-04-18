@@ -35,6 +35,9 @@ function avatarsModal() {
       <button class="close-modal btn-close">
         <span class="lnr lnr-cross"></span>
       </button>
+      <header class="avatars--header">
+        <h2>Selecione um avatar</h2>
+      </header>
       <li class="avatar">
         <img src="../assets/avatars/man-1.png" />
       </li>
