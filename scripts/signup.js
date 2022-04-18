@@ -30,27 +30,33 @@ let inputPassOk = false;
 let inputPassConfirmOk = false;
 
 // VALIDATE NAME INPUT
-inputName.addEventListener(`focusout`, () => {
+const validateInputName = () => {
   const [firstName, lastName] = inputName.value.split(` `);
 
+  let error = msgErr
+
   if (inputName.value.length < 2) {
-    msgErr.innerText = `Name must have more than 1 letter`;
-    inputName.parentElement.appendChild(msgErr);
-    return;
+    error.innerText = `Name must have more than 1 letter`;
+    return inputName.parentElement.appendChild(error);
+    // return;
   }
 
   if (inputName.value.length >= 2 && inputName.parentElement.contains(msgErr)) {
-    msgErr.innerText = ``;
-    inputName.parentElement.removeChild(msgErr);
+    error.innerText = ``;
+    return inputName.parentElement.removeChild(error);
   }
 
-  if (!inputName.parentElement.contains(msgErr)) {
+  if (!inputName.parentElement.contains(error)) {
     return (inputNameOk = true);
   }
+}
+
+inputName.addEventListener(`focusout`, () => {
+  validateInputName()
 });
 
 // VALIDATE LASTNAME
-inputLastname.addEventListener(`focusout`, () => {
+const validateInputLastName = () => {
   if (inputLastname.value.length <= 1) {
     msgErr.innerText = `Lastname must have more than 1 characters`;
     inputLastname.parentElement.appendChild(msgErr);
@@ -68,11 +74,15 @@ inputLastname.addEventListener(`focusout`, () => {
   if (!inputLastname.parentElement.contains(msgErr)) {
     return (inputLastnameOk = true);
   }
+}
+
+inputLastname.addEventListener(`focusout`, () => {
+  validateInputLastName()
 });
 
 // VALIDATE EMAIL
-inputEmail.addEventListener(`focusout`, () => {
-  if (!inputEmail.value.match(emailRequirements)) {
+const validateInputEmail = () => {
+ if (!inputEmail.value.match(emailRequirements)) {
     msgErr.innerText = `Invalid email`;
     inputEmail.parentElement.appendChild(msgErr);
   } else {
@@ -84,11 +94,15 @@ inputEmail.addEventListener(`focusout`, () => {
 
   if (!inputEmail.parentElement.contains(msgErr)) {
     return (inputEmailOk = true);
-  }
+  } 
+}
+
+inputEmail.addEventListener(`focusout`, () => {
+  validateInputEmail()
 });
 
 // VALIDATE PASSWORD INPUT
-inputPass.addEventListener(`focusout`, () => {
+const validateInputPassword = () => {
   if (inputPass.value.length < 8) {
     msgErr.innerText = `Password must have at least 8 letters`;
     inputPass.parentElement.appendChild(msgErr);
@@ -114,10 +128,14 @@ inputPass.addEventListener(`focusout`, () => {
   if (!inputPass.parentElement.contains(msgErr)) {
     inputPassOk = true;
   }
+}
+
+inputPass.addEventListener(`focusout`, () => {
+  validateInputPassword()
 });
 
 // VALIDATE PASSWORD CONFIRMATION INPUT
-inputPassConfirm.addEventListener(`focusout`, () => {
+const validateInputPasswordConfirmation = () => {
   if (inputPassConfirm.value !== inputPass.value) {
     msgErr.innerText = `Password doesn't match`;
     inputPassConfirm.parentElement.appendChild(msgErr);
@@ -131,6 +149,10 @@ inputPassConfirm.addEventListener(`focusout`, () => {
       return (inputPassConfirmOk = true);
     }
   }
+}
+
+inputPassConfirm.addEventListener(`focusout`, () => {
+  validateInputPasswordConfirmation()
 });
 
 // REGISTER USER
@@ -154,6 +176,12 @@ function registerSuccessful(name, lastname, email, jsonReceived) {
 
 btnConfirm.addEventListener(`click`, (e) => {
   e.preventDefault();
+
+  validateInputName()
+  validateInputLastName()
+  validateInputEmail()
+  validateInputPassword()
+  validateInputPasswordConfirmation()
 
   if (
     inputNameOk &&
