@@ -2,27 +2,43 @@
 
 const container = document.querySelector(`.container`);
 const userName = document.querySelector(`#username`);
-const userAvatar = document.querySelector(`.user-image`);
+// const userAvatar = document.querySelector(`.user-image`);
+const userAvatar = document.querySelector(`#user-image--img`);
 
 if (!localStorage.getItem("userAvatar")) {
   // userAvatar.style.backgroundImage = localStorage.getItem("userAvatar");
   avatarsModal();
 } else {
   // avatarsModal();
-  userAvatar.style.backgroundImage = localStorage.getItem("userAvatar");
+  // userAvatar.style.backgroundImage = localStorage.getItem("userAvatar");
+  userAvatar.src = localStorage.getItem("userAvatar");
 }
 
+let uploadedImg
 // const loggedUser = localStorage.getItem("jwt");
 
 // const API_URL = `https://ctd-todo-api.herokuapp.com/v1`;
 
+function readImage() {
+    if (this.files && this.files[0]) {
+        const file = new FileReader();
+        file.onload = (e) => {
+          uploadedImg = e.target.result
+          localStorage.setItem("userAvatar", uploadedImg)
+          userAvatar.src = localStorage.getItem("userAvatar");
+          return uploadedImg
+        };       
+        file.readAsDataURL(this.files[0]);
+    }
+}
+
 const setAvatar = (avatar) => {
   const newAvatar = localStorage.setItem(
     "userAvatar",
-    `url("${avatar.children[0].getAttribute(`src`)}")`
+    `${avatar.children[0].getAttribute(`src`)}`
   );
   // return userAvatar.style.backgroundImage = `url("${avatar.children[0].getAttribute(`src`)}")`;
-  userAvatar.style.backgroundImage = localStorage.getItem("userAvatar");
+  return userAvatar.src = `${avatar.children[0].getAttribute(`src`)}`;
 };
 
 const closeModal = (element) => container.removeChild(element);
@@ -36,7 +52,11 @@ function avatarsModal() {
         <span class="lnr lnr-cross"></span>
       </button>
       <header class="avatars--header">
-        <h2>Selecione um avatar</h2>
+        <div class="upload-img">
+          <input id="upload-img--input" type="file" name="image" />
+          <button id="upload-img--button" >Salvar</button>
+        </div>
+        <h2>Ou selecione um avatar:</h2>
       </header>
       <li class="avatar">
         <img src="../assets/avatars/man-1.png" />
@@ -67,15 +87,26 @@ function avatarsModal() {
 
   container.appendChild(avatarsModal);
 
-  let btnCloseModal = document.querySelector(`.close-modal`);
+  const avatars = document.querySelectorAll(`.avatar`);
+  const btnCloseModal = document.querySelector(`.close-modal`);
+  const btnSaveUploadedImg = document.querySelector('#upload-img--button')
+  const inputUploadImage = document.querySelector('#upload-img--input')
+
+  inputUploadImage.addEventListener("change", readImage, false);
+
+  btnSaveUploadedImg.addEventListener(`click`, e => {
+    e.preventDefault()
+    localStorage.setItem("userAvatar", uploadedImg)
+    userAvatar.src = uploadedImg
+    // setAvatar(uploadedImg)
+    closeModal(avatarsModal);
+  })
 
   btnCloseModal.addEventListener(`click`, (e) => {
     e.preventDefault();
 
     closeModal(avatarsModal);
   });
-
-  let avatars = document.querySelectorAll(`.avatar`);
 
   avatars.forEach((avatar) => {
     avatar.addEventListener(`click`, (e) => {
