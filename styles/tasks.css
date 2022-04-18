@@ -44,6 +44,10 @@ a {
 }
 
 .user-info .user-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   height: 2em;
   width: 2em;
   border-radius: 50%;
@@ -52,6 +56,12 @@ a {
   background-position: center;
 
   cursor: pointer;
+
+  overflow: hidden;
+}
+
+.user-image > img {
+  width: 100%;
 }
 
 #closeApp {
