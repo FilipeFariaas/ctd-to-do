@@ -56,31 +56,53 @@ btnSubmit.addEventListener(`click`, (e) => {
     msgErr.innerText = `Please insert your credentials`;
     inputPass.parentElement.appendChild(msgErr);
   } else {
+    spinner(true)
     fetch(`${API_URL}/users/login`, config)
       .then((response) => {
         return response.json();
       })
       .then((response) => {
+        //console.log('start')
+        
         try{
-          if(response.jwt){
+         if(response.jwt){
             saveJwt(response.jwt);
             window.location.href = "./pages/tasks.html";
           
           }
-          else{
-            //alert("Falha na autenticacão, verifique usuário e senha.")
-            msgErr.innerText = "Falha na autenticacão, verifique usuário e senha."
-            inputPass.parentElement.appendChild(msgErr);
+        else{
+            setTimeout(()=>{spinner(false)
+              msgErr.innerText = "Falha na autenticacão, verifique usuário e senha.";
+              inputPass.parentElement.appendChild(msgErr);
+            },3000);
           }
-
         }
         catch{
-            //alert("Falha na autenticacão, verifique usuário e senha.")
-            msgErr.innerText = "Falha na autenticacão, verifique usuário e senha."
+          setTimeout(()=>{spinner(false)
+            msgErr.innerText = "Falha na autenticacão, verifique usuário e senha.";
             inputPass.parentElement.appendChild(msgErr);
+          },3000);
         }
         
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        msgErr.innerText = "Falha na autenticacão, verifique usuário e senha."
+        inputPass.parentElement.appendChild(msgErr);});
   }
 });
+
+function spinner (ativo){
+  if(ativo){
+    let divSpinner = document.createElement('div');
+    divSpinner.id = 'spinner'
+    divSpinner.innerHTML = '<img id="spinnerImg" src="assets/spinner.png" alt="">'
+    document.body.append(divSpinner)
+
+  }
+  else{
+    let divSpinner = document.querySelector('#spinner');
+    divSpinner.remove();
+  }
+  
+}

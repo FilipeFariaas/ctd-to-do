@@ -82,7 +82,7 @@ inputLastname.addEventListener(`focusout`, () => {
 
 // VALIDATE EMAIL
 const validateInputEmail = () => {
- if (!inputEmail.value.match(emailRequirements)) {
+  if (!inputEmail.value.match(emailRequirements)) {
     msgErr.innerText = `Invalid email`;
     inputEmail.parentElement.appendChild(msgErr);
   } else {
@@ -94,7 +94,7 @@ const validateInputEmail = () => {
 
   if (!inputEmail.parentElement.contains(msgErr)) {
     return (inputEmailOk = true);
-  } 
+  }
 }
 
 inputEmail.addEventListener(`focusout`, () => {
@@ -174,8 +174,9 @@ function registerSuccessful(name, lastname, email, jsonReceived) {
   //window.location.href = "../pages/tasks.html";
 }
 
-btnConfirm.addEventListener(`click`, (e) => {
+btnConfirm.addEventListener(`click`, async (e) => {
   e.preventDefault();
+
 
   validateInputName()
   validateInputLastName()
@@ -190,6 +191,7 @@ btnConfirm.addEventListener(`click`, (e) => {
     inputPassOk &&
     inputPassConfirmOk
   ) {
+    spinner(true)
     let config = {
       method: "POST",
       body: JSON.stringify({
@@ -203,33 +205,61 @@ btnConfirm.addEventListener(`click`, (e) => {
       }
     };
 
-    fetch(`${API_URL}/users`, config)
+    let result = await fetch(`${API_URL}/users`, config)
       .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        try{
-          if(response.jwt!=""){
-            registerSuccessful(
+        console.log(response);
+        return response;
+      }).catch((error) => { spinner(false); alert(error); });
+
+    switch (result.status) {
+      case 500:
+        msgErr.innerText = 'Erro do servidor, envie novamente.';
+        inputPassConfirm.parentElement.appendChild(msgErr);
+        setTimeout(() => spinner(false), 1500);
+        break;
+      case 400:
+        msgErr.innerText = 'Usuario ja cadastrado. verifique os dados.';
+        inputPassConfirm.parentElement.appendChild(msgErr);
+        setTimeout(() => spinner(false), 1500);
+        break;
+      case 201:
+        result.json().then((response) => {
+          console.log(response);
+          registerSuccessful(
             inputName.value,
             inputLastname.value,
             inputEmail.value,
             response.jwt
-            );
-            saveJwt(response.jwt);
-            //window.location.href = "../pages/tasks.html";
-          }
-          else{
-            alert("Falha no registro, por favor tente novamente.")
-            console.log(response)
-          }
-        }
-        catch{
-            alert("Falha no registro, por favor tente novamente.")
-            console.log(response)
-        }
-        
-      })
-      .catch((error) => console.log(error));
+          );
+          saveJwt(response.jwt);
+          window.location.href = "../pages/tasks.html";
+        }).catch((response) => {
+          msgErr.innerText = 'Erro do servidor, envie novamente.';
+          inputPassConfirm.parentElement.appendChild(msgErr);
+          setTimeout(() => spinner(false), 1500);
+        })
+        break;
+      default:
+        console.log(await result.json().then((response)=>{return response}))
+        msgErr.innerText = 'Erro do servidor, envie novamente.';
+        inputPassConfirm.parentElement.appendChild(msgErr);
+        setTimeout(() => spinner(false), 1500);
+        break;
+    }
   }
-});
+})
+
+function spinner(ativo) {
+  if (ativo) {
+    let divSpinner = document.createElement('div');
+    divSpinner.id = 'spinner'
+    divSpinner.innerHTML = '<img id="spinnerImg" src="../assets/spinner.png" alt="">'
+    document.body.append(divSpinner)
+
+  }
+  else {
+    let divSpinner = document.querySelector('#spinner');
+    divSpinner.remove();
+  }
+
+}

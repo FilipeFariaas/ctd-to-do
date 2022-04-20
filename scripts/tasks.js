@@ -187,60 +187,6 @@ const completeTask = (id) => {
       .catch((err) => console.log(err));
 }
 
-// const completeTask = () => {
-//   const btnCompleteTask = document.querySelectorAll(`.not-done`);
-
-//   btnCompleteTask.forEach((btn) => {
-//     btn.addEventListener(`click`, async (e) => {
-//       e.preventDefault();
-//       e.stopPropagation();
-
-//       console.log(`clicked`);
-
-//       const task = btn.parentElement;
-//       const taskId = task.getAttribute(`id`).slice(1);
-//       const taskTitle = btn.nextElementSibling.children[0].innerText;
-//       const taskCreation = btn.nextElementSibling.children[1].innerText;
-
-//       task.classList.toggle(`tarefa--pendente`);
-//       task.classList.toggle(`tarefa--concluida`);
-//       const taskIsComplete = task.classList.contains(`tarefa--concluida`);
-//       const taskObj = {
-//         id: taskId,
-//         description: taskTitle,
-//         createdAt: taskCreation,
-//         completed: taskIsComplete
-//       };
-//       console.log(task);
-
-//       task.remove();
-
-//       renderTask(taskObj);
-
-//       const config = {
-//         method: "PUT",
-//         headers: {
-//           "Content-type": "application/json",
-//           Authorization: loggedUser
-//         },
-//         body: JSON.stringify({
-//           description: taskTitle,
-//           completed: taskIsComplete ? true : false
-//         })
-//       };
-
-//       fetch(`${API_URL}/tasks/${taskId}`, config)
-//         .then((response) => {
-//           return response.json();
-//         })
-//         .then((response) => {
-//           console.log(response);
-//         })
-//         .catch((err) => console.log(err));
-//     });
-//   });
-// };
-
 const createTaskTemplate = (id, title, creation, completed) => {
   const taskTemplate = `
   <li id=_${id} class="tarefa tarefa--${completed ? "concluida" : "pendente"
@@ -283,37 +229,12 @@ const renderTask = (task) => {
   }
 
   inputNewTask.value = "";
-
-  // const btnDeleteTask = document.querySelectorAll(`#deleteTask`);
-
-  // btnDeleteTask.forEach((btn) => {
-    
-  //   btn.addEventListener(`click`, (e) => {
-  //     e.preventDefault();
-  //     console.log('delete clicked')
-  //     const taskId = btn.parentElement.getAttribute("id").slice(1);
-  //     deleteTask(taskId);
-  //     btn.parentElement.remove();
-  //   });
-  // });
-
-  // const btnEditTask = document.querySelectorAll(`#edit-task`);
-
-  // btnEditTask.forEach((btn) => {
-  //   btn.addEventListener(`click`, (e) => {
-  //     e.preventDefault();
-  //     const taskId = btn.parentElement.getAttribute("id").slice(1);
-
-  //     getTaskData(taskId);
-  //   });
-  // });
-
-  //completeTask();
 };
 
 const loadUserTasks = () => {
-  tasksPending.innerHTML = '<div class="skeletonLoading"></div>'
-  tasksCompleted.innerHTML = '<div class="skeletonLoading"></div>'
+  tasksPending.innerHTML = `<div class="skeletonLoading">${createTaskTemplate('XXXX','Em progresso','1/1/1970','1/1/1970')}</div>`;
+  tasksCompleted.innerHTML = `<div class="skeletonLoading">${createTaskTemplate('XXXX','Finalizada','1/1/1970','1/1/1970')}</div>`;
+  spinner(true)
   let config = {
     method: "GET",
     headers: {
@@ -327,11 +248,15 @@ const loadUserTasks = () => {
       return response.json();
     })
     .then((response) => {
-      tasksPending.innerHTML = "";
-      tasksCompleted.innerHTML = "";
-      response.forEach((task) => {
-        renderTask(task);
-      });
+      setTimeout(()=>{
+        tasksPending.innerHTML = "";
+        tasksCompleted.innerHTML = "";
+        spinner(false)
+        response.forEach((task) => {
+          renderTask(task)
+        });
+      },4000);
+      
     })
     .catch((err) => console.log(err));
 };
@@ -350,7 +275,7 @@ btnEndSession.addEventListener(`click`, (e) => {
   // localStorage.removeItem(`jwt`);
   localStorage.clear()
   window.location = "../index.html";
-  console.log(`clicked`);
+  //console.log(`clicked`);
 });
 
 btnAddTask.addEventListener(`click`, (e) => {
@@ -377,5 +302,20 @@ btnAddTask.addEventListener(`click`, (e) => {
     })
     .catch((err) => console.log(err));
 });
+
+function spinner (ativo){
+  if(ativo){
+    let divSpinner = document.createElement('div');
+    divSpinner.id = 'spinner'
+    divSpinner.innerHTML = '<img id="spinnerImg" src="../assets/spinner.png" alt="">'
+    document.body.append(divSpinner)
+
+  }
+  else{
+    let divSpinner = document.querySelector('#spinner');
+    divSpinner.remove();
+  }
+  
+}
 
 window.onload = validateAccess();

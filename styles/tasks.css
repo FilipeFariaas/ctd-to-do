@@ -473,24 +473,22 @@ a {
   background-color: rgb(218, 216, 216);
 }
 
-/* #skeleton .descricao {
-  background-color: rgb(189, 189, 189);
-}
-#skeleton p {
-  background-color: rgb(214, 214, 214);
-  color: rgb(214, 214, 214);
-}
-#skeleton .not-done {
-  background-color: rgb(189, 189, 189);
-}
-
-#skeleton {
-  animation: trasparencia 1s infinite;
-} */
 .skeletonLoading {
   width: 100%;
   height: 25vh;
   animation: animacionDeCarga 2s infinite;
+}
+
+#_XXXX .descricao{
+  animation: animacionDeCarga 2s infinite;
+  box-shadow: 0px 0px 0px lightgrey;
+}
+
+#_XXXX .not-done{
+  animation: animacionDeCarga 2s infinite;
+}
+#_XXXX p{
+  color: white;
 }
 
 @keyframes animacionDeCarga {
@@ -504,5 +502,63 @@ a {
 
   100% {
     background-color: transparent;
+  }
+}
+
+@keyframes animacionDeCarga2 {
+  0% {
+    background-color: transparent;
+  }
+
+  50% {
+    background-color: lightpink;
+  }
+
+  100% {
+    background-color: transparent;
+  }
+}
+
+#spinner{
+  position:absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left:0;
+  top:0;
+  height: 100vh;
+  width: 100vw;
+  background-color: RGB(255,255,255,0.7);
+  padding: 0 auto;
+  z-index: 1;
+}
+#spinnerImg{
+  width: auto;
+  height: 10vh;
+  left: 50%;
+  opacity: 0.7;
+  -webkit-animation: girar 2s linear infinite;
+  animation: girar 2s linear infinite;
+}
+
+@keyframes girar {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes girar {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
 }

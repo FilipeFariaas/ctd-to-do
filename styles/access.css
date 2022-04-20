@@ -102,3 +102,46 @@ button {
     width: 100%;
   }
 }
+
+#spinner{
+  position:absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left:0;
+  top:0;
+  height: 100vh;
+  width: 100vw;
+  background-color: RGB(255,255,255,0.7);
+  padding: 0 auto;
+}
+#spinnerImg{
+  opacity: 0.7;
+  width: auto;
+  height: 10vh;
+  left: 50%;
+  -webkit-animation: girar 2s linear infinite;
+  animation: girar 2s linear infinite;
+}
+
+@keyframes girar {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes girar {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
