@@ -31,7 +31,7 @@ let inputPassConfirmOk = false;
 
 // VALIDATE NAME INPUT
 const validateInputName = () => {
-  const [firstName, lastName] = inputName.value.split(` `);
+  // const [firstName, lastName] = inputName.value.split(` `);
 
   let error = msgErr
 

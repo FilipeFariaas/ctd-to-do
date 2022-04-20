@@ -255,7 +255,7 @@ const loadUserTasks = () => {
         response.forEach((task) => {
           renderTask(task)
         });
-      },4000);
+      },1500);
       
     })
     .catch((err) => console.log(err));
